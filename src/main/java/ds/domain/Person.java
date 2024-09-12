@@ -2,11 +2,11 @@ package ds.domain;
 
 public class Person
 {
-    private Integer id = 0;
-    private String name = "";
-    private Integer age = 0;
-    private String address = "";
-    private String work = "";
+    private Integer id = null;
+    private String name = null;
+    private Integer age = null;
+    private String address = null;
+    private String work = null;
 
     public Person() {}
     public Person(

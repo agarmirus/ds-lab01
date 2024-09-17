@@ -13,7 +13,7 @@ public class PersonModel implements IModel
 
     public PersonModel(final IDAO<Person> personDAO) { this.personDAO = personDAO; }
 
-    public Person createPerson(final Person person) throws AppException
+    public Optional<Person> createPerson(final Person person) throws AppException
     {
         if (personDAO == null)
             throw new AppNullDAOException(
@@ -40,27 +40,20 @@ public class PersonModel implements IModel
                 "PersonModel.createPerson(person): invalid person work"
             );
 
-        Optional<Person> optResult = personDAO.create(person);
-
-        if (optResult.isEmpty())
-            throw new AppDataAccessException(
-                "PersonModel.createPerson(person): created result is null"
-            );
-        
-        return optResult.get();
+        return personDAO.create(person);
     }
 
-    public List<Person> getAllPersons() throws AppException
+    public Optional<List<Person>> getAllPersons() throws AppException
     {
         if (personDAO == null)
             throw new AppNullDAOException(
                 "PersonModel.getAllPersons(): person DAO is null"
             );
         
-        return personDAO.get().get();
+        return personDAO.get();
     }
 
-    public Person getPerson(final Person person) throws AppException
+    public Optional<Person> getPerson(final Person person) throws AppException
     {
         if (personDAO == null)
             throw new AppNullDAOException(
@@ -72,10 +65,10 @@ public class PersonModel implements IModel
                 "PersonModel.getPerson(person): invalid person id"
             );
         
-        return personDAO.get(person).get();
+        return personDAO.get(person);
     }
 
-    public Person updatePerson(final Person person) throws AppException
+    public Optional<Person> updatePerson(final Person person) throws AppException
     {
         if (personDAO == null)
             throw new AppNullDAOException(
@@ -107,7 +100,7 @@ public class PersonModel implements IModel
                 "PersonModel.updatePerson(person): invalid person work"
             );
         
-        return personDAO.update(person).get();
+        return personDAO.update(person);
     }
 
     public void deletePerson(final Person person) throws AppException

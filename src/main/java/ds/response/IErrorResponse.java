@@ -6,4 +6,6 @@ public interface IErrorResponse
     public void setMessage(String msg);
 
     public void addProp(String prop);
+
+    public String toString();
 }

@@ -1,5 +1,6 @@
 package ds.model;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,14 @@ public class PersonModel implements IModel
                 "PersonModel.createPerson(person): invalid person work"
             );
 
-        return personDAO.create(person);
+        Optional<Person> optCreatedPerson = personDAO.create(person);
+
+        if (optCreatedPerson.isEmpty())
+            throw new AppInvalidPersonDataException(
+                "PersonModel.createPerson(person): empty result"
+            );
+        
+        return optCreatedPerson;
     }
 
     public Optional<List<Person>> getAllPersons() throws AppException

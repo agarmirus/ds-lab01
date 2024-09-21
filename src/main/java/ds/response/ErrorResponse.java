@@ -10,6 +10,9 @@ public class ErrorResponse implements IErrorResponse
     private String msg = null;
     private List<String> props = new ArrayList<String>();
 
+    public ErrorResponse() {}
+    public ErrorResponse(String msg) { this.msg = msg; }
+
     public String getMessage() { return msg; }
     public void setMessage(String msg) { this.msg = msg; }
 
@@ -30,7 +33,7 @@ public class ErrorResponse implements IErrorResponse
                 var errorJsonObject = new JsonObject();
 
                 for (int i = 0; i < props.size(); ++i)
-                    errorJsonObject.addProperty("additionalProp" + Integer.toString(i + 1), props.get(i));
+                    errorJsonObject.addProperty(String.format("additionalProp%d", i + 1), props.get(i));
 
                 jsonObject.add("errors", errorJsonObject);
             }
@@ -39,5 +42,10 @@ public class ErrorResponse implements IErrorResponse
         }
 
         return result;
+    }
+
+    public Boolean isError()
+    {
+        return (msg != null && !msg.isEmpty()) || props.size() > 0;
     }
 }

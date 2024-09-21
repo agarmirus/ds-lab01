@@ -8,4 +8,6 @@ public interface IErrorResponse
     public void addProp(String prop);
 
     public String toString();
+
+    public Boolean isError();
 }

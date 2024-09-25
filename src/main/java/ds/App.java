@@ -43,7 +43,7 @@ public class App
         try
         {
             String jsonString = readConfigFile("config.json");
-            var jsonObject = new JSONObject(jsonString);
+            JSONObject jsonObject = new JSONObject(jsonString);
 
             String connStr = jsonObject.getString("conn");
 

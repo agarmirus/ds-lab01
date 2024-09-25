@@ -71,7 +71,7 @@ public class PostgresPersonDAO implements IDAO<Person>
 
             if (queryResultSet.next())
             {
-                var result = new Person();
+                Person result = new Person();
                 result.setId(queryResultSet.getInt("id"));
 
                 optResult = Optional.of(result);
@@ -112,7 +112,7 @@ public class PostgresPersonDAO implements IDAO<Person>
 
             while (queryResultSet.next())
             {
-                var person = new Person(
+                Person person = new Person(
                     queryResultSet.getInt("id"),
                     queryResultSet.getString("name"),
                     queryResultSet.getInt("age"),
@@ -162,7 +162,7 @@ public class PostgresPersonDAO implements IDAO<Person>
 
             if (queryResultSet.next())
             {
-                var result = new Person(
+                Person result = new Person(
                     queryResultSet.getInt("id"),
                     queryResultSet.getString("name"),
                     queryResultSet.getInt("age"),
@@ -213,7 +213,7 @@ public class PostgresPersonDAO implements IDAO<Person>
 
             if (queryResultSet.next())
             {
-                var result = new Person(
+                Person result = new Person(
                     queryResultSet.getInt("id"),
                     queryResultSet.getString("name"),
                     queryResultSet.getInt("age"),

@@ -42,7 +42,7 @@ public class PersonModel implements IModel
 
         Optional<Person> optCreatedPerson = personDAO.create(person);
 
-        if (optCreatedPerson.isEmpty())
+        if (!optCreatedPerson.isPresent())
             throw new AppInvalidPersonDataException(
                 "PersonModel.createPerson(person): empty result"
             );

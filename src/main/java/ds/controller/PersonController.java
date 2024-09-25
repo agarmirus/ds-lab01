@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 
 import ds.domain.Person;
 import ds.model.IModel;
-import ds.response.ErrorResponse;
+import ds.response.*;
 import ds.utils.JsonConverter;
 
 public class PersonController implements IController
@@ -22,7 +22,7 @@ public class PersonController implements IController
     protected Person performPersonCreating(Request req, Response res)
     {
         Person result = null;
-        var errRes = new ErrorResponse();
+        IErrorResponse errRes = new ErrorResponse();
 
         try
         {
@@ -66,7 +66,7 @@ public class PersonController implements IController
     protected List<Person> performAllPersonsReading(Response res)
     {
         List<Person> resultLst = null;
-        var errRes = new ErrorResponse();
+        IErrorResponse errRes = new ErrorResponse();
 
         try
         {
@@ -93,7 +93,7 @@ public class PersonController implements IController
     protected Person performPersonReading(Request req, Response res)
     {
         Person result = null;
-        var errRes = new ErrorResponse();
+        IErrorResponse errRes = new ErrorResponse();
 
         try
         {
@@ -111,7 +111,7 @@ public class PersonController implements IController
             {
                 Optional<Person> optFoundPerson = model.getPerson(searchingPerson);
 
-                if (optFoundPerson.isEmpty())
+                if (!optFoundPerson.isPresent())
                 {
                     errRes.setMessage("Not found Person for ID");
 
@@ -139,7 +139,7 @@ public class PersonController implements IController
     protected Person performPersonUpdate(Request req, Response res)
     {
         Person result = null;
-        var errRes = new ErrorResponse();
+        IErrorResponse errRes = new ErrorResponse();
 
         try
         {
@@ -168,7 +168,7 @@ public class PersonController implements IController
             {
                 Optional<Person> optUpdatedPerson = model.updatePerson(updatingPerson);
 
-                if (optUpdatedPerson.isEmpty())
+                if (!optUpdatedPerson.isPresent())
                 {
                     errRes.setMessage("Not found Person for ID");
 
@@ -196,13 +196,13 @@ public class PersonController implements IController
     protected Integer performPersonRemoving(Request req, Response res)
     {
         Integer removingPersonId = null;
-        var errRes = new ErrorResponse();
+        IErrorResponse errRes = new ErrorResponse();
 
         try
         {
             removingPersonId = Integer.parseInt(req.attribute(":id"));
 
-            var removingPerson = new Person();
+            Person removingPerson = new Person();
             removingPerson.setId(removingPersonId);
 
             model.deletePerson(removingPerson);

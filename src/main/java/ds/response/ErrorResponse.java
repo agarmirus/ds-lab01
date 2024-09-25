@@ -24,13 +24,13 @@ public class ErrorResponse implements IErrorResponse
 
         if (msg != null)
         {
-            var jsonObject = new JsonObject();
+            JsonObject jsonObject = new JsonObject();
 
             jsonObject.addProperty("message", msg);
             
             if (!props.isEmpty())
             {
-                var errorJsonObject = new JsonObject();
+                JsonObject errorJsonObject = new JsonObject();
 
                 for (int i = 0; i < props.size(); ++i)
                     errorJsonObject.addProperty(String.format("additionalProp%d", i + 1), props.get(i));

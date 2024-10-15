@@ -1,5 +1,6 @@
 package ds.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface IDAO<T>
     public Optional<T> update(final T entity) throws AppException;
 
     public void delete(final T entity) throws AppException;
+
+    public void close() throws AppException;
 }

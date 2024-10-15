@@ -266,4 +266,22 @@ public class PostgresPersonDAO implements IDAO<Person>
             );
         }
     }
+
+    public void close() throws AppException
+    {
+        try
+        {
+            if (!conn.isClosed())
+                conn.close();
+        }
+        catch (SQLException e)
+        {
+            throw new AppDataAccessException(
+                String.format(
+                    "PostgresBookDAO.close(): %s",
+                    e.getMessage()
+                )
+            );
+        }
+    }
 }

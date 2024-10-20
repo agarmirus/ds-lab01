@@ -54,7 +54,7 @@ public class PostgresPersonDAOTest
     static public void preapareTest() throws Exception
     {
         String jsonString = readConfigFile("config.json");
-        var jsonObject = new JSONObject(jsonString);
+        JSONObject jsonObject = new JSONObject(jsonString);
 
         connStr = jsonObject.getString("conn");
         conn = DriverManager.getConnection(connStr, "postgres", "postgres");
@@ -62,7 +62,7 @@ public class PostgresPersonDAOTest
     }
 
     @AfterClass
-    static void cleanTest() throws Exception
+    static public void cleanTest() throws Exception
     {
         Statement statement = conn.createStatement();
         statement.execute("call clear_tables()");

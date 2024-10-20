@@ -59,7 +59,7 @@ public class PostgresPersonDAO implements IDAO<Person>
             }
 
             String query = String.format(
-                "insert into person values ('%s', %d, '%s', '%s') returning *;",
+                "insert into person (name, age, address, work) values ('%s', %d, '%s', '%s') returning *;",
                 person.getName(),
                 person.getAge(),
                 person.getAddress(),

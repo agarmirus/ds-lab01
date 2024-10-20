@@ -220,9 +220,11 @@ public class PersonController implements IController
         return removingPersonId;
     }
 
-    public PersonController(final IModel model)
+    public PersonController(final IModel model, final Integer port)
     {
         this.model = model;
+
+        Spark.port(port);
 
         Spark.get("/api/v1/persons", (req, res) -> performAllPersonsReading(res), JsonConverter.json());
         Spark.get("/api/v1/persons/:id", (req, res) -> performPersonReading(req, res), JsonConverter.json());

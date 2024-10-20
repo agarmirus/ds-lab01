@@ -46,10 +46,11 @@ public class App
             JSONObject jsonObject = new JSONObject(jsonString);
 
             String connStr = jsonObject.getString("conn");
+            Integer port = jsonObject.getInt("port");
 
             IDAO<Person> personDAO = new PostgresPersonDAO(connStr, "postgres", "postgres");
             IModel personModel = new PersonModel(personDAO);
-            IController personController = new PersonController(personModel);
+            IController personController = new PersonController(personModel, port);
         }
         catch (Exception e)
         {

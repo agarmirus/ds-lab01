@@ -84,8 +84,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: agarmirus/ds-lab1-app:latest
-          build-args: |
-            PIPELINE_ID=${{ github.run_number }}
       
       - name: Deploy app to host
         uses: appleboy/ssh-action@v1.0.3

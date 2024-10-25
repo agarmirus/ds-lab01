@@ -1,0 +1,114 @@
+name: Server build and deploy
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: Build an app
+        run: mvn package assembly:single -Dmaven.test.skip
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: jar
+          path: target/*.jar
+          retention-days: 1
+  
+  unit-test:
+    name: Perform unit tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Docker build
+        uses: docker/setup-buildx-action@v3
+
+      - name: Setup Postgres database
+        run: docker compose up -d
+      
+      - name: Run unit tests
+        run: mvn test
+  
+  deploy:
+    name: Deploy an app
+    needs: [unit-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: jar
+          path: target/
+
+      - name: Setup Docker build
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Gihub Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: agarmirus
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish app image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: agarmirus/ds-lab1-app:latest
+          build-args: |
+            PIPELINE_ID=${{ github.run_number }}
+      
+      - name: Deploy app to host
+        uses: appleboy/ssh-actions
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: >-
+            docker pull agarmirus/ds-lab1-app:latest &&
+            (docker stop httpserv && docker rm httpserv || true) &&
+            docker run --name httpserv --restart always -d agarmirus/ds-lab1-app:latest
+
+      - name: Run API Tests
+        uses: matt-ball/newman-action@master
+        with:
+          collection: postman/[inst] Lab1.postman_collection.json
+          environment: postman/[inst][heroku] Lab1.postman_environment.json
+          delayRequest: 100
+          reporters: '[ "cli" ]'
+
+      - name: Autograding
+        uses: education/autograding@v1
+        continue-on-error: true
+
+      # - name: Github auto grader mark
+      #   uses: Romanow/google-sheet-autograder-marker@v1.0
+      #   with:
+      #     google_token: ${{secrets.GOOGLE_API_KEY}}
+      #     sheet_id: "1xkgjUX6Qmk7rdJG-QPOToav-HWWtthJjnShIKnw3oIY"
+      #     homework_number: 1
+      #     user_column: 'D'
+      #     column_offset: 'F'
+      #     mark: "'+"

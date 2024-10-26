@@ -92,9 +92,9 @@ jobs:
           key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SERVER_SSH_PSWD }}
           script: >-
-            docker pull agarmirus/ds-lab1-app:latest &&
-            (docker stop httpserv && docker rm httpserv || true) &&
-            docker run --name httpserv --restart always -d agarmirus/ds-lab1-app:latest
+            sudo docker pull agarmirus/ds-lab1-app:latest &&
+            (sudo docker stop httpserv && docker rm httpserv || true) &&
+            sudo docker run --name httpserv --restart always -d agarmirus/ds-lab1-app:latest
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master

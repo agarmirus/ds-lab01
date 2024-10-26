@@ -93,7 +93,7 @@ jobs:
           passphrase: ${{ secrets.SERVER_SSH_PSWD }}
           script: >-
             sudo docker pull agarmirus/ds-lab1-app:latest &&
-            (sudo docker stop httpserv && docker rm httpserv || true) &&
+            (sudo docker stop httpserv && sudo docker rm httpserv || true) &&
             sudo docker run --name httpserv --restart always -d agarmirus/ds-lab1-app:latest
       
       - name: Add app URL to Postman environment

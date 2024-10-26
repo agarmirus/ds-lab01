@@ -98,7 +98,7 @@ public class PersonController implements IController
         try
         {
             Person searchingPerson = new Person();
-            searchingPerson.setId(Integer.parseInt(req.attribute(":id")));
+            searchingPerson.setId(Integer.parseInt(req.params(":id")));
 
             if (searchingPerson.getId() == null)
             {
@@ -144,7 +144,7 @@ public class PersonController implements IController
         try
         {
             Person updatingPerson = new Gson().fromJson(req.body(), Person.class);
-            updatingPerson.setId(Integer.parseInt(req.attribute(":id")));
+            updatingPerson.setId(Integer.parseInt(req.params(":id")));
 
             if (updatingPerson.getId() == null)
                 errRes.addProp("id");
@@ -200,7 +200,7 @@ public class PersonController implements IController
 
         try
         {
-            removingPersonId = Integer.parseInt(req.attribute(":id"));
+            removingPersonId = Integer.parseInt(req.params(":id"));
 
             Person removingPerson = new Person();
             removingPerson.setId(removingPersonId);

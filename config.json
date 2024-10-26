@@ -1,4 +1,4 @@
 {
-    "conn": "jdbc:postgresql://172.18.0.2:5432/postgres",
+    "conn": "jdbc:postgresql://localhost:5432/postgres",
     "port": 8080
 }

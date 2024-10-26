@@ -258,7 +258,7 @@ public class PostgresPersonDAO implements IDAO<Person>
             );
 
             Statement statement = conn.createStatement();
-            statement.executeQuery(query);
+            statement.executeUpdate(query);
         }
         catch (SQLException e)
         {

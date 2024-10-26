@@ -87,22 +87,30 @@ public class PersonModel implements IModel
                 "PersonModel.updatePerson(person): invalid person id"
             );
         
-        if (person.getName() == null || person.getName().trim().isEmpty())
+        if (person.getName() == null &&
+            person.getAge() == null &&
+            person.getAddress() == null &&
+            person.getWork() == null)
+            throw new AppInvalidPersonDataException(
+                "PersonModel.updatePerson(person): at least one non-null field required"
+            );
+
+        if (person.getName() != null && person.getName().trim().isEmpty())
             throw new AppInvalidPersonDataException(
                 "PersonModel.updatePerson(person): invalid person name"
             );
         
-        if (person.getAge() == null || person.getAge() < 0)
+        if (person.getAge() != null && person.getAge() < 0)
             throw new AppInvalidPersonDataException(
                 "PersonModel.updatePerson(person): invalid person age"
             );
 
-        if (person.getAddress() == null || person.getAddress().trim().isEmpty())
+        if (person.getAddress() != null && person.getAddress().trim().isEmpty())
             throw new AppInvalidPersonDataException(
                 "PersonModel.updatePerson(person): invalid person address"
             );
         
-        if (person.getWork() == null || person.getWork().trim().isEmpty())
+        if (person.getWork() != null && person.getWork().trim().isEmpty())
             throw new AppInvalidPersonDataException(
                 "PersonModel.updatePerson(person): invalid person work"
             );

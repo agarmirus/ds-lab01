@@ -199,14 +199,18 @@ public class PostgresPersonDAO implements IDAO<Person>
                 );
             }
 
-            String query = String.format(
-                "update person set name = '%s', age = %d, address = '%s', work = '%s' where id = %d returning *;",
-                person.getName(),
-                person.getAge(),
-                person.getAddress(),
-                person.getWork(),
-                person.getId()
-            );
+            String query = "";
+
+            if (person.getName() != null)
+                query = String.format("update person set name = '%s'", person.getName());
+            if (person.getAge() != null)
+                query += (query == "" ? String.format("update person set age = '%s'", person.getAge()) : String.format(", age = '%s'", person.getAge()));
+            if (person.getAddress() != null)
+                query += (query == "" ? String.format("update person set address = '%s'", person.getAddress()) : String.format(", address = '%s'", person.getAddress()));
+            if (person.getWork() != null)
+                query += (query == "" ? String.format("update person set work = '%s'", person.getWork()) : String.format(", work = '%s'", person.getWork()));
+            
+            query += "returning *;";
 
             Statement statement = conn.createStatement();
             ResultSet queryResultSet = statement.executeQuery(query);

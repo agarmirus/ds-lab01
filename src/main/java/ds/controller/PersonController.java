@@ -156,14 +156,23 @@ public class PersonController implements IController
 
             if (updatingPerson.getId() == null)
                 errRes.addProp("id");
-            if (updatingPerson.getName() == null || updatingPerson.getName().trim().isEmpty())
-                errRes.addProp("name");
-            if (updatingPerson.getAge() == null || updatingPerson.getAge() < 0)
-                errRes.addProp("age");
-            if (updatingPerson.getAddress() == null || updatingPerson.getAddress().trim().isEmpty())
-                errRes.addProp("address");
-            if (updatingPerson.getWork() == null || updatingPerson.getWork().trim().isEmpty())
-                errRes.addProp("work");
+
+            if (updatingPerson.getName() == null &&
+                updatingPerson.getAge() == null &&
+                updatingPerson.getAddress() == null &&
+                updatingPerson.getWork() == null)
+                errRes.addProp("At least one non-null field required");
+            else
+            {
+                if (updatingPerson.getName() != null && updatingPerson.getName().trim().isEmpty())
+                    errRes.addProp("name");
+                if (updatingPerson.getAge() != null && updatingPerson.getAge() < 0)
+                    errRes.addProp("age");
+                if (updatingPerson.getAddress() != null && updatingPerson.getAddress().trim().isEmpty())
+                    errRes.addProp("address");
+                if (updatingPerson.getWork() != null && updatingPerson.getWork().trim().isEmpty())
+                    errRes.addProp("work");
+            }
 
             if (errRes.isError())
             {
@@ -192,6 +201,7 @@ public class PersonController implements IController
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
             errRes.setMessage(e.getMessage());
 
             res.status(500);
@@ -209,7 +219,7 @@ public class PersonController implements IController
         try
         {
             res.type("application/json");
-            
+
             removingPersonId = Integer.parseInt(req.params(":id"));
 
             Person removingPerson = new Person();
@@ -241,7 +251,7 @@ public class PersonController implements IController
 
         Spark.post("/api/v1/persons", (req, res) -> performPersonCreating(req, res), JsonConverter.json());
         
-        Spark.delete("/api/v1/persons:id", (req, res) -> performPersonRemoving(req, res));
+        Spark.delete("/api/v1/persons/:id", (req, res) -> performPersonRemoving(req, res));
 
         Spark.patch("/api/v1/persons/:id", (req, res) -> performPersonUpdate(req, res), JsonConverter.json());
     }

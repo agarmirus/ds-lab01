@@ -19,7 +19,7 @@ public class PersonController implements IController
 {
     private IModel model = null;
 
-    protected Person performPersonCreating(Request req, Response res)
+    protected Object performPersonCreating(Request req, Response res)
     {
         Person result = null;
         IErrorResponse errRes = new ErrorResponse();
@@ -45,14 +45,14 @@ public class PersonController implements IController
 
                 res.status(400);
                 res.body(errRes.toString());
-            }
-            else
-            {
-                Optional<Person> optCreatedPerson = model.createPerson(newPerson);
 
-                res.status(201);
-                res.header("Location", String.format("/api/v1/persons/%d", optCreatedPerson.get().getId()));
+                return errRes.toString();
             }
+
+            Optional<Person> optCreatedPerson = model.createPerson(newPerson);
+
+            res.status(201);
+            res.header("Location", String.format("/api/v1/persons/%d", optCreatedPerson.get().getId()));
         }
         catch (Exception e)
         {
@@ -60,12 +60,14 @@ public class PersonController implements IController
 
             res.status(500);
             res.body(errRes.toString());
+
+            return errRes.toString();
         }
 
         return result;
     }
 
-    protected List<Person> performAllPersonsReading(Response res)
+    protected Object performAllPersonsReading(Response res)
     {
         List<Person> resultLst = null;
         IErrorResponse errRes = new ErrorResponse();
@@ -89,12 +91,14 @@ public class PersonController implements IController
 
             res.status(500);
             res.body(errRes.toString());
+
+            return errRes.toString();
         }
 
         return resultLst;
     }
 
-    protected Person performPersonReading(Request req, Response res)
+    protected Object performPersonReading(Request req, Response res)
     {
         Person result = null;
         IErrorResponse errRes = new ErrorResponse();
@@ -123,12 +127,12 @@ public class PersonController implements IController
 
                     res.status(404);
                     res.body(errRes.toString());
+
+                    return errRes.toString();
                 }
-                else
-                {
-                    result = optFoundPerson.get();
-                    res.status(200);
-                }
+
+                result = optFoundPerson.get();
+                res.status(200);
             }
         }
         catch (Exception e)
@@ -137,12 +141,14 @@ public class PersonController implements IController
 
             res.status(500);
             res.body(errRes.toString());
+
+            return errRes.toString();
         }
 
         return result;
     }
 
-    protected Person performPersonUpdate(Request req, Response res)
+    protected Object performPersonUpdate(Request req, Response res)
     {
         Person result = null;
         IErrorResponse errRes = new ErrorResponse();
@@ -180,24 +186,25 @@ public class PersonController implements IController
 
                 res.status(400);
                 res.body(errRes.toString());
+
+                return errRes.toString();
             }
-            else
+
+            Optional<Person> optUpdatedPerson = model.updatePerson(updatingPerson);
+
+            if (!optUpdatedPerson.isPresent())
             {
-                Optional<Person> optUpdatedPerson = model.updatePerson(updatingPerson);
+                errRes.setMessage("Not found Person for ID");
 
-                if (!optUpdatedPerson.isPresent())
-                {
-                    errRes.setMessage("Not found Person for ID");
+                res.status(404);
+                res.body(errRes.toString());
 
-                    res.status(404);
-                    res.body(errRes.toString());
-                }
-                else
-                {
-                    result = optUpdatedPerson.get();
-                    res.status(200);
-                }
+                return errRes.toString();
             }
+
+            result = optUpdatedPerson.get();
+            res.status(200);
+
         }
         catch (Exception e)
         {
@@ -206,12 +213,14 @@ public class PersonController implements IController
 
             res.status(500);
             res.body(errRes.toString());
+
+            return errRes.toString();
         }
 
         return result;
     }
 
-    protected Integer performPersonRemoving(Request req, Response res)
+    protected Object performPersonRemoving(Request req, Response res)
     {
         Integer removingPersonId = null;
         IErrorResponse errRes = new ErrorResponse();
@@ -235,6 +244,8 @@ public class PersonController implements IController
 
             res.status(500);
             res.body(errRes.toString());
+
+            return errRes.toString();
         }
 
         return removingPersonId;

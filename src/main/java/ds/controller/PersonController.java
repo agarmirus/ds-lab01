@@ -26,6 +26,8 @@ public class PersonController implements IController
 
         try
         {
+            res.type("application/json");
+
             Person newPerson = new Gson().fromJson(req.body(), Person.class);
             
             if (newPerson.getName() == null || newPerson.getName().trim().isEmpty())
@@ -70,6 +72,8 @@ public class PersonController implements IController
 
         try
         {
+            res.type("application/json");
+
             Optional<List<Person>> optResultLst = model.getAllPersons();
 
             if (optResultLst.isPresent())
@@ -97,6 +101,8 @@ public class PersonController implements IController
 
         try
         {
+            res.type("application/json");
+
             Person searchingPerson = new Person();
             searchingPerson.setId(Integer.parseInt(req.params(":id")));
 
@@ -143,6 +149,8 @@ public class PersonController implements IController
 
         try
         {
+            res.type("application/json");
+
             Person updatingPerson = new Gson().fromJson(req.body(), Person.class);
             updatingPerson.setId(Integer.parseInt(req.params(":id")));
 
@@ -200,6 +208,8 @@ public class PersonController implements IController
 
         try
         {
+            res.type("application/json");
+            
             removingPersonId = Integer.parseInt(req.params(":id"));
 
             Person removingPerson = new Person();
